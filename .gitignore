@@ -1,0 +1,56 @@
+# Node modules
+node_modules/
+
+# Log files
+*.log
+
+# Environment variables
+.env
+
+# Next.js build output
+.next/
+
+# Build outputs (for both Next.js and Express.js)
+dist/
+
+# Coverage reports
+coverage/
+
+# Dependency directories
+jspm_packages/
+
+# Temporary files
+tmp/
+temp/
+
+# MacOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+ehthumbs.db
+
+# VS Code specific files
+.vscode/
+
+# SQLite database files (if you're using SQLite with Sequelize)
+*.sqlite
+
+# Local files for testing (if you have any)
+*.local
+
+# Ignore npm-debug log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Other optional files to ignore
+npm-shrinkwrap.json
+package-lock.json
+yarn.lock
+
+# Other environment variables files if necessary
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
