@@ -1,12 +1,12 @@
 const User = require('../models/User');
 
-// Create a new user
 exports.createUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, role } = req.body;
-    const user = await User.create({ firstName, lastName, email, role });
+    const { firstName, lastName, email, password, phoneNumber, role } = req.body;
+    const user = await User.create({ firstName, lastName, email, password, phoneNumber, role });
     res.status(201).json(user);
   } catch (error) {
+    console.error(error);
     if (error.name === 'SequelizeUniqueConstraintError') {
       res.status(400).json({ message: 'Email already exists.' });
     } else if (error.name === 'SequelizeValidationError') {
@@ -17,17 +17,15 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Get all users
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ order: [['createdAt', 'DESC']] });
+    const users = await User.findAll(); 
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// Get a single user
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
@@ -38,17 +36,18 @@ exports.getUser = async (req, res) => {
   }
 };
 
-// Update a user
 exports.updateUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, role } = req.body;
+    const { firstName, lastName, email, password, phoneNumber, role } = req.body;
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.email = email;
-    user.role = role;
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (email) user.email = email;
+    if (phoneNumber !== undefined) user.phoneNumber = phoneNumber; // Allowing for null
+    if (password) user.password = password;
+    if (role) user.role = role;
 
     await user.save();
     res.json(user);
@@ -63,7 +62,6 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// Delete a user
 exports.deleteUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
