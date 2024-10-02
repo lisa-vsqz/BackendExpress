@@ -13,8 +13,7 @@ const sequelize = new Sequelize(
     dialect: 'mssql',
     dialectOptions: {
       options: {
-        encrypt: true, // Use this if you're on Windows Azure
-        trustServerCertificate: true, // Change to true for local dev / self-signed certs
+        trustServerCertificate: true, 
       },
     },
     pool: {
@@ -23,7 +22,7 @@ const sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    logging: false, // Disable logging; default: console.log
+    logging: false, 
   }
 );
 

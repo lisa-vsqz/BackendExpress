@@ -36,7 +36,7 @@ const User = sequelize.define('User', {
     defaultValue: 'client',
   },
 }, {
-  timestamps: true, // Adds createdAt and updatedAt fields
+  timestamps: false, // Adds createdAt and updatedAt fields
 });
 
 module.exports = User;
