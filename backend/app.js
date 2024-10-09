@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const cors = require('cors');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
@@ -6,11 +7,18 @@ const sequelize = require('./config/database');
 
 dotenv.config();
 
-const app = express();
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   })
+// );
 
 // Routes
 app.use('/api/users', userRoutes);
