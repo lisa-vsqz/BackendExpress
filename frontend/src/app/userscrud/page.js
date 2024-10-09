@@ -3,21 +3,37 @@ import React, { useEffect, useState } from 'react';
 import { getUsers, getUser, createUser, updateUser, deleteUser } from '../../services/userService';
 import UserTable from '../../components/UserTable';
 import UserForm from '../../components/UserForm';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import LogoutButton from '../../components/LogoutButton';
+
+
+
 
 export default function ListUsers ()  {
   const [users, setUsers] = useState([]);
   const [formView, setFormView] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (status === "loading") return; // Espera a que se cargue la sesión
+    if (!session) router.push("/auth/signin");
+  }, [session, status, router]);
+
+
+  useEffect(() => {
+    if (session) {
+      fetchUsers();
+    }
+  }, [session]);
+
+  
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/users`);
   
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const data = await response.json(); 
+      const data = await getUsers();
       //console.log('Fetched users:', data); 
   
       if (Array.isArray(data)) {
@@ -27,14 +43,11 @@ export default function ListUsers ()  {
       }
     } catch (error) {
       console.error('Error fetching users:', error);
+      alert('Error al obtener los usuarios.');
     }
   };
   
   
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const handleCreate = () => {
     setSelectedUser(null);
@@ -82,9 +95,15 @@ export default function ListUsers ()  {
     setSelectedUser(null);
   };
 
+  
+  if (status === "loading") {
+    return <div>Cargando...</div>;
+  }
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Users Crud</h1>
+      <LogoutButton />
       {!formView && (
         <>
           <button 
